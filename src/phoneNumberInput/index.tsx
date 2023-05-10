@@ -1,22 +1,28 @@
-import { useRef, useEffect, useCallback, useReducer } from "react";
-// import propTypes
-import PropTypes from "prop-types";
-// import react icons
-import { AiFillCaretDown } from "react-icons/ai";
-// data
-import { Countries } from "./data/Countries";
+import React, { useRef, useEffect, useCallback, useReducer } from "react";
 
-export default function PhoneNumberInput({
-  defaultCountry = "EG",
-  onResultNumberPhone = () => {},
+// import Countries Data
+import { Countries } from "../data/Countries";
+
+// import Types
+import { Counter, ResultNumber, StateReducer } from "../libs/types";
+
+interface Props {
+  defaultCountry: string;
+  onResultNumberPhone: (prev: ResultNumber) => void;
+  errorInput?: string;
+}
+
+export const PhoneNumberInput: React.FC<Props> = ({
+  defaultCountry,
+  onResultNumberPhone,
   errorInput,
-}) {
+}) => {
   const isDefaultCountry = Countries.find(
     (item) => item.code === defaultCountry?.toUpperCase()
-  );
+  ) as Counter;
 
   const [state, updateState] = useReducer(
-    (prev, next) => ({ ...prev, ...next }),
+    (prev: StateReducer, next: Partial<StateReducer>) => ({ ...prev, ...next }),
     {
       openCountry: false,
       phoneNumber: "",
@@ -32,10 +38,10 @@ export default function PhoneNumberInput({
     }
   );
 
-  const elemRef = useRef(null);
-  const elemBtnRef = useRef(null);
+  const elemCountriesRef = useRef(null) as React.RefObject<HTMLDivElement>;
+  const eleBtnRef = useRef(null) as React.RefObject<HTMLButtonElement>;
 
-  const handelOnSelected = (item) => {
+  const handelOnSelected = (item: Counter): void => {
     updateState({
       openCountry: false,
       phoneNumber: "",
@@ -57,9 +63,9 @@ export default function PhoneNumberInput({
     });
   };
 
-  const handelOnChange = (e) => {
+  const handelOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let unmaskedPhoneNumber = (e.target.value.match(/\d+/g) || []).join("");
-    const countOfNumber = state.country.mask.match(/9/g).length;
+    const countOfNumber = state.country.mask.match(/9/g)?.length;
     const isVerified = countOfNumber === unmaskedPhoneNumber.length;
 
     if (!isVerified) {
@@ -74,22 +80,25 @@ export default function PhoneNumberInput({
     });
   };
 
-  const handelAutoCloseCountry = useCallback((e) => {
-    if (
-      !elemRef.current?.contains(e.target) &&
-      !elemBtnRef.current?.contains(e.target)
-    ) {
-      updateState({
-        openCountry: false,
-        isCountries: Countries,
-        query: [],
-      });
-    }
-  }, []);
+  const handelAutoCloseCountry = useCallback(
+    (e: MouseEvent | React.BaseSyntheticEvent) => {
+      if (
+        !elemCountriesRef.current?.contains(e.target) &&
+        !eleBtnRef.current?.contains(e.target)
+      ) {
+        updateState({
+          openCountry: false,
+          isCountries: Countries,
+          query: [],
+        });
+      }
+    },
+    []
+  );
 
   const handelQueryCountry = useCallback(
-    (e) => {
-      let arrQuery = [];
+    (e: KeyboardEvent) => {
+      let arrQuery = [] as string[];
 
       if (e.code.match("Key")) {
         arrQuery = [...state.query, e.key];
@@ -105,7 +114,7 @@ export default function PhoneNumberInput({
         });
       }
 
-      const isQuery = arrQuery.join("").toLowerCase();
+      const isQuery = arrQuery.join("").toLowerCase() as string;
       if (arrQuery.length > 0) {
         updateState({
           isCountries: Countries.filter((item) =>
@@ -146,8 +155,11 @@ export default function PhoneNumberInput({
               className="input-number"
               name="phone-number"
               value={state.phoneNumber}
+              autoComplete="tel"
+              // value={state.country?.mask.replace(/9/, state.phoneNumber)}
               onChange={handelOnChange}
               placeholder={state.country?.mask.replace(/9/g, "-")}
+              inputMode="tel"
             />
             <div className="country-dialCode">
               <span className="dialCode">{state.country?.dialCode}</span>
@@ -158,7 +170,7 @@ export default function PhoneNumberInput({
             <button
               type="button"
               onClick={handelToggleButton}
-              ref={elemBtnRef}
+              ref={eleBtnRef}
               className={`country ${
                 state.openCountry ? "active-countries" : ""
               }`}
@@ -166,19 +178,30 @@ export default function PhoneNumberInput({
               data-country={state.country?.en}
             >
               <span className="down">
-                <AiFillCaretDown color="#000" size={18} />
+                <svg
+                  stroke="currentColor"
+                  fill="currentColor"
+                  strokeWidth="0"
+                  viewBox="0 0 1024 1024"
+                  color="#000"
+                  height="18"
+                  width="18"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path d="M840.4 300H183.6c-19.7 0-30.7 20.8-18.5 35l328.4 380.8c9.4 10.9 27.5 10.9 37 0L858.9 335c12.2-14.2 1.2-35-18.5-35z"></path>
+                </svg>
               </span>
               <span className="flag">{state.country?.flag}</span>
             </button>
           </div>
           {state.openCountry && (
-            <div className="countries-content" ref={elemRef}>
+            <div className="countries-content" ref={elemCountriesRef}>
               <div className="countries-content__card">
                 <div className="countries-content__body">
                   {!state.isCountries.length ? (
                     <p className="no-country">لا يوجد بلد</p>
                   ) : (
-                    state.isCountries.map((item, index) => (
+                    state.isCountries.map((item: Counter, index: number) => (
                       <div
                         className="country"
                         role="button"
@@ -210,10 +233,4 @@ export default function PhoneNumberInput({
       </div>
     </div>
   );
-}
-
-PhoneNumberInput.propTypes = {
-  defaultCountry: PropTypes.string.isRequired,
-  onResultNumberPhone: PropTypes.func.isRequired,
-  errorInput: PropTypes.bool,
 };

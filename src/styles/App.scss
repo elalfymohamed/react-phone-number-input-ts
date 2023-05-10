@@ -1,0 +1,11 @@
+input[type="number"] {
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+
+  &:focus-visible {
+    outline: -webkit-focus-ring-color auto 0px;
+  }
+}
+
+@import "./phoneNumberInput";
