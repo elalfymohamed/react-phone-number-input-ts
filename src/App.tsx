@@ -1,18 +1,19 @@
-import React from "react";
-import { PhoneNumberInput } from "./phoneNumberInput";
+import { PhoneNumberInput } from "./phoneNumber";
 
 function App() {
   return (
-    <>
-      <div>
-        <PhoneNumberInput
-          defaultCountry="EG"
-          onResultNumberPhone={(prev) => console.log(prev)}
-          errorInput={""}
-        />
+    <main className="app-main">
+      <div className="container">
+        <div className="card">
+          <PhoneNumberInput
+            defaultCountry="EG"
+            onResultNumberPhone={(prev) => console.log(prev)}
+            // inputError={}
+            // msgError="Phone Number is required"
+          />
+        </div>
       </div>
-      <div></div>
-    </>
+    </main>
   );
 }
 

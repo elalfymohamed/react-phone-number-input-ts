@@ -9,13 +9,18 @@ import { Counter, ResultNumber, StateReducer } from "../libs/types";
 interface Props {
   defaultCountry: string;
   onResultNumberPhone: (prev: ResultNumber) => void;
-  errorInput?: string;
+  inputError?: boolean;
+  msgError?: string | boolean;
+  lang?: "ar" | "en" | "ru" | "lt" | "tr" | "ko";
+  label?: string;
 }
 
 export const PhoneNumberInput: React.FC<Props> = ({
   defaultCountry,
   onResultNumberPhone,
-  errorInput,
+  inputError,
+  msgError,
+  label,
 }) => {
   const isDefaultCountry = Countries.find(
     (item) => item.code === defaultCountry?.toUpperCase()
@@ -133,7 +138,6 @@ export const PhoneNumberInput: React.FC<Props> = ({
   useEffect(() => {
     if (!state.openCountry) return;
     window.addEventListener("click", handelAutoCloseCountry, true);
-
     return () =>
       window.removeEventListener("click", handelAutoCloseCountry, true);
   }, [handelAutoCloseCountry, state.openCountry]);
@@ -147,16 +151,15 @@ export const PhoneNumberInput: React.FC<Props> = ({
   return (
     <div className="control-input">
       <div className="content-input">
-        <label className="label">رقم الموبايل</label>
+        <label className="label">{label ?? "Enter Phone Number:"}</label>
         <div className="control-phone">
-          <div className={`input-phone ${errorInput ? "error-input" : ""} `}>
+          <div className={`input-phone ${inputError ? "input-error" : ""} `}>
             <input
               type="number"
               className="input-number"
               name="phone-number"
               value={state.phoneNumber}
               autoComplete="tel"
-              // value={state.country?.mask.replace(/9/, state.phoneNumber)}
               onChange={handelOnChange}
               placeholder={state.country?.mask.replace(/9/g, "-")}
               inputMode="tel"
@@ -225,9 +228,11 @@ export const PhoneNumberInput: React.FC<Props> = ({
             </div>
           )}
         </div>
-        {errorInput && (
-          <div className="error-input-msg">
-            <p className="error-input-msg__text">رقم الموبايل مطلوب</p>
+        {msgError && (
+          <div className="input-error-msg">
+            <p className="input-error-msg__text">
+              {msgError ?? "Phone Number is required"}
+            </p>
           </div>
         )}
       </div>
