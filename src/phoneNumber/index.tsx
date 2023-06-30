@@ -1,19 +1,17 @@
 import React, { useRef, useEffect, useCallback, useReducer } from "react";
 
 // import Countries Data
-import { Countries } from "../data/Countries";
+import { countries } from "../data/countries";
 
 // import Types
-import { Counter, ResultNumber, StateReducer } from "../libs/types";
+import { Counter, Props, StateReducer } from "../libs/types";
 
-interface Props {
-  defaultCountry: string;
-  onResultNumberPhone: (prev: ResultNumber) => void;
-  inputError?: boolean;
-  msgError?: string | boolean;
-  lang?: "ar" | "en" | "ru" | "lt" | "tr" | "ko";
-  label?: string;
-}
+//
+import {
+  handelToGetCountry,
+  handleNotFoundDataSearch,
+  handleRequiredMsg,
+} from "../utility";
 
 export const PhoneNumberInput: React.FC<Props> = ({
   defaultCountry,
@@ -21,9 +19,17 @@ export const PhoneNumberInput: React.FC<Props> = ({
   inputError,
   msgError,
   label,
+  lang = "en",
+  classLabel,
+  autoCountry,
 }) => {
-  const isDefaultCountry = Countries.find(
-    (item) => item.code === defaultCountry?.toUpperCase()
+  const countryVal = autoCountry
+    ? handelToGetCountry(defaultCountry)
+    : defaultCountry;
+  const key = autoCountry ? "en" : "code";
+
+  const isDefaultCountry = countries.find(
+    (item) => item[key] === countryVal
   ) as Counter;
 
   const [state, updateState] = useReducer(
@@ -31,14 +37,14 @@ export const PhoneNumberInput: React.FC<Props> = ({
     {
       openCountry: false,
       phoneNumber: "",
-      isCountries: Countries,
+      isCountries: countries,
       query: [],
       country: {
         flag: isDefaultCountry.flag,
         code: isDefaultCountry.code,
         dialCode: isDefaultCountry.dialCode,
         mask: isDefaultCountry.mask,
-        en: isDefaultCountry.en,
+        [lang]: isDefaultCountry[lang],
       },
     }
   );
@@ -50,14 +56,14 @@ export const PhoneNumberInput: React.FC<Props> = ({
     updateState({
       openCountry: false,
       phoneNumber: "",
-      isCountries: Countries,
+      isCountries: countries,
       query: [],
       country: {
         flag: item.flag,
         code: item.code,
         dialCode: item.dialCode,
         mask: item.mask,
-        en: item.en,
+        [lang]: item[lang],
       },
     });
   };
@@ -65,11 +71,13 @@ export const PhoneNumberInput: React.FC<Props> = ({
   const handelToggleButton = () => {
     updateState({
       openCountry: !state.openCountry,
+      isCountries: countries,
+      query: [],
     });
   };
 
   const handelOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let unmaskedPhoneNumber = (e.target.value.match(/\d+/g) || []).join("");
+    const unmaskedPhoneNumber = (e.target.value.match(/\d+/g) || []).join("");
     const countOfNumber = state.country.mask.match(/9/g)?.length;
     const isVerified = countOfNumber === unmaskedPhoneNumber.length;
 
@@ -82,6 +90,8 @@ export const PhoneNumberInput: React.FC<Props> = ({
     onResultNumberPhone({
       isVerified: isVerified,
       phoneNumber: `${state.country.dialCode}${state.phoneNumber}`,
+      phone: state.phoneNumber,
+      dialCode: state.country.dialCode,
     });
   };
 
@@ -93,7 +103,7 @@ export const PhoneNumberInput: React.FC<Props> = ({
       ) {
         updateState({
           openCountry: false,
-          isCountries: Countries,
+          isCountries: countries,
           query: [],
         });
       }
@@ -122,18 +132,22 @@ export const PhoneNumberInput: React.FC<Props> = ({
       const isQuery = arrQuery.join("").toLowerCase() as string;
       if (arrQuery.length > 0) {
         updateState({
-          isCountries: Countries.filter((item) =>
+          isCountries: countries.filter((item) =>
             item.code.toLowerCase().includes(isQuery)
           ),
         });
         return;
       }
       updateState({
-        isCountries: Countries,
+        isCountries: countries,
       });
     },
     [state]
   );
+
+  //
+  const notFoundMsg = handleNotFoundDataSearch(lang);
+  const requiredMsg = handleRequiredMsg(lang);
 
   useEffect(() => {
     if (!state.openCountry) return;
@@ -151,7 +165,9 @@ export const PhoneNumberInput: React.FC<Props> = ({
   return (
     <div className="control-input">
       <div className="content-input">
-        <label className="label">{label ?? "Enter Phone Number:"}</label>
+        <label className={classLabel ? classLabel : "label"}>
+          {label ?? "Enter Phone Number:"}
+        </label>
         <div className="control-phone">
           <div className={`input-phone ${inputError ? "input-error" : ""} `}>
             <input
@@ -202,11 +218,15 @@ export const PhoneNumberInput: React.FC<Props> = ({
               <div className="countries-content__card">
                 <div className="countries-content__body">
                   {!state.isCountries.length ? (
-                    <p className="no-country">لا يوجد بلد</p>
+                    <p className="no-country">{notFoundMsg}</p>
                   ) : (
                     state.isCountries.map((item: Counter, index: number) => (
                       <div
-                        className="country"
+                        className={`country ${
+                          state.country.code === item.code
+                            ? "selected-country"
+                            : ""
+                        }`}
                         role="button"
                         key={index}
                         aria-label={`country ${item.en}`}
@@ -230,9 +250,7 @@ export const PhoneNumberInput: React.FC<Props> = ({
         </div>
         {msgError && (
           <div className="input-error-msg">
-            <p className="input-error-msg__text">
-              {msgError ?? "Phone Number is required"}
-            </p>
+            <p className="input-error-msg__text">{msgError ?? requiredMsg}</p>
           </div>
         )}
       </div>
