@@ -1,4 +1,4 @@
-export const Countries = [
+export const countries = [
   {
     ru: "Соединенные Штаты",
     lt: "Jungtinės Valstijos",
