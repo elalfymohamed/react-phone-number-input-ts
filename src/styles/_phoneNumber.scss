@@ -53,8 +53,8 @@
       &::placeholder {
         font-size: 1.1rem;
         color: #0008;
-        text-align: right;
-        transform: rotateY(180deg);
+        // text-align: right;
+        // transform: rotateY(180deg);
       }
     }
 
@@ -127,6 +127,10 @@
           align-items: center;
           cursor: pointer;
           padding: 0.2rem 0.3rem;
+
+          &.selected-country {
+            background-color: #b4b4b449;
+          }
 
           &:hover {
             background-color: #9d9d9d49;
