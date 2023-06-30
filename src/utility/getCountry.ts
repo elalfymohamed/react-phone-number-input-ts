@@ -2,10 +2,10 @@ import data from "../data/latest.json";
 
 // the get country by Time Zone
 // It may not be accurate, and depend on the timezone selected by the user on their system, which can be changed
-export const getCountry = () => {
-  let userCity = "" as string;
-  let userCountry = "" as string;
-  let dataCountry = data as any;
+export const handelToGetCountry = (defaultCountry: string): string => {
+  let userCity = "";
+  let userCountry = "";
+  const dataCountry = data as any;
 
   if (Intl) {
     const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -14,7 +14,5 @@ export const getCountry = () => {
     userCountry = dataCountry[userCity];
   }
 
-  return {
-    country: userCountry,
-  };
+  return userCountry === "" ? defaultCountry : userCountry;
 };
