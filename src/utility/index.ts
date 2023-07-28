@@ -1,5 +1,5 @@
-import { getCountryByTimeZone } from "./getCountryByTimeZone";
+import { handleGetCountry } from "./handleGetCountry";
 import { handleNotFoundDataSearch } from "./handleNotFoundDataSearch";
 import { handleRequiredMsg } from "./handleRequiredMsg";
 
-export { getCountryByTimeZone, handleNotFoundDataSearch, handleRequiredMsg };
+export { handleGetCountry, handleNotFoundDataSearch, handleRequiredMsg };
