@@ -610,8 +610,6 @@ export const countries = [
     dialCode: "+236",
     mask: "99 99 99 99",
   },
-
-  ///////
   {
     ru: "Чад",
     lt: "Čadas",
@@ -1096,7 +1094,6 @@ export const countries = [
     dialCode: "+44",
     mask: "99999 999999",
   },
-  // =========
   {
     ru: "Гвинея",
     lt: "Gvinėjos",
@@ -1603,7 +1600,6 @@ export const countries = [
     dialCode: "+52",
     mask: "999-999 9999",
   },
-  // -=-=-=-=-==-=-=-=-
   {
     ru: "Микронезия, Федеративные Штаты Микронезии",
     lt: "Mikronezijos Federacinės Mikronezijos valstybės",
@@ -2242,7 +2238,7 @@ export const countries = [
     dialCode: "+34",
     mask: "999 99 99 99",
   },
-  // --0-0-0-0-0-0-0-0-0-0
+
   {
     ru: "Шри-Ланка",
     lt: "Šri Lanka",
