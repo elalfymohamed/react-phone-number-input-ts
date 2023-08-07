@@ -1,0 +1,168 @@
+.content-input .label {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.content-input .control-phone {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  flex-direction: row-reverse;
+  margin-top: 0.3rem;
+}
+.content-input .control-phone .input-phone {
+  width: 100%;
+  height: 40px;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border-color: #7c7c7c;
+  border-width: 1px;
+  border-style: solid;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+  align-items: center;
+  transition: all 0.4s ease-out;
+}
+.content-input .control-phone .input-phone.input-error {
+  border-color: #ff0000;
+}
+.content-input .control-phone .input-phone .country-dialCode {
+  margin-right: 0.4rem;
+}
+.content-input .control-phone .input-phone .country-dialCode .dialCode {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #131d26;
+  display: block;
+}
+.content-input .control-phone .input-number {
+  border: 0;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #131d26;
+  height: 30px;
+  text-align: left;
+}
+.content-input .control-phone .input-number::placeholder {
+  font-size: 1.1rem;
+  color: #0008;
+}
+.content-input .control-phone .content-country {
+  margin-right: 1rem;
+}
+.content-input .control-phone .content-country .country {
+  height: 48px;
+  width: 65px;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border-color: #7c7c7c;
+  border-width: 1px;
+  border-style: solid;
+  background-color: transparent;
+  cursor: pointer;
+}
+.content-input .control-phone .content-country .country .down svg {
+  transition: all 0.3s ease;
+  transform: rotate(0deg);
+  vertical-align: middle;
+}
+.content-input .control-phone .content-country .country.active-countries {
+  box-shadow: 1px 0px 8px 9px rgba(0, 0, 0, 0.06);
+}
+.content-input
+  .control-phone
+  .content-country
+  .country.active-countries
+  .down
+  svg {
+  transform: rotate(180deg);
+}
+.content-input .control-phone .content-country .country .flag {
+  font-size: 1rem;
+  margin-left: 0.3rem;
+}
+.content-input .control-phone .countries-content {
+  position: absolute;
+  top: 50px;
+  left: -6px;
+  z-index: 10;
+}
+.content-input .control-phone .countries-content__card {
+  width: 80px;
+  height: 250px;
+  background-color: #fff;
+  box-shadow: 1px 0px 8px 9px rgba(0, 0, 0, 0.06);
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.content-input .control-phone .countries-content__card::-webkit-scrollbar {
+  display: none;
+}
+.content-input .control-phone .countries-content__body {
+  margin: 0.3rem 0;
+}
+.content-input .control-phone .countries-content__body .country {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-direction: row-reverse;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.2rem 0.3rem;
+}
+.content-input
+  .control-phone
+  .countries-content__body
+  .country.selected-country {
+  background-color: #b4b4b449;
+}
+.content-input .control-phone .countries-content__body .country:hover {
+  background-color: #9d9d9d49;
+}
+.content-input
+  .control-phone
+  .countries-content__body
+  .country
+  .country-dialCode {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #131d26;
+  direction: ltr;
+}
+.content-input
+  .control-phone
+  .countries-content__body
+  .country
+  .country-flag
+  .flag {
+  margin-right: 0.2rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #131d26;
+}
+.content-input
+  .control-phone
+  .countries-content__body
+  .country
+  .country-flag
+  .code {
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #131d26;
+}
+.content-input .control-phone .countries-content .no-country {
+  font-size: 0.7rem;
+  font-weight: 400;
+  text-align: center;
+}
+.content-input .input-error-msg {
+  margin-top: 0.3rem;
+}
+.content-input .input-error-msg__text {
+  margin: 0;
+  font-size: 0.6rem;
+  font-weight: 500;
+  color: #f00;
+}
